@@ -1,5 +1,5 @@
 
-##the various libraries to use for this script
+## Load these libraries into R
 library(tidyverse)
 library(tidytext)
 library(reticulate)
@@ -8,7 +8,7 @@ library(topicmodels)
 library(reshape2)
 
 
-##preprocessing script
+## preprocessing script
 if (packageVersion("reticulate") >= "1.40") {
      py_require(c("kiwipiepy", "hanja"))      # declares both dependencies
 } else {
@@ -24,14 +24,14 @@ cat("kiwipiepy:", py_module_available("kiwipiepy"),
 
 
 
-## change this to the location of you corpus
+## Load corpus
 corpus <- read_csv("data/colonial_magazines_sample", show_col_types = FALSE)
 s <- spec(corpus)
 
 cat("Loaded", nrow(corpus), "articles\n")
 
 
-## change this to the location of your stopword file
+## Load stopwords file
 stopword_file <- normalizePath(
    "data/stopwords_ko.txt",
    winslash = "/",
@@ -118,7 +118,7 @@ corpus_hanmun <- corpus |> filter(text_type == "hanmun")
 cat("\nExample KOREAN article (readings + nouns):\n")
 
 
-## change this to the location of your sentiment lexicons
+## Load sentiment lexicon
 negative_words <- readLines(
   "data/negative.txt",
   encoding = "UTF-8"
@@ -138,7 +138,7 @@ my_sentiments <- tibble(
 )
 
 
-##sentiment by era
+## Sentiment analysis
 corpus_korean_by_era <- corpus_korean %>%
   mutate(
     era = case_when(
@@ -197,7 +197,7 @@ ggplot(sentiment_by_article,
   )
 
 
-##script for LDA topics
+## LDA topic modeling
 eras <- levels(corpus_korean_by_era$era)
 
 lda_models <- map(eras, function(e){
@@ -245,7 +245,7 @@ topic_summary <- topic_words %>%
 topic_summary
 
 
-## change this to your output location
+## Export outputs
 write.csv(
   topic_summary,
   "output/topic_summary_by_era.csv",
