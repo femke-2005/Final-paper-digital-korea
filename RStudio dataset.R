@@ -151,33 +151,50 @@ corpus_korean_by_era <- corpus_korean %>%
     ),
     era = factor(
       era,
-      levels = c("pre-colonial", "start of colonial period", "relative liberalization", "harsh conservative government", "militarization, ethnocide")
+      levels = c(
+        "pre-colonial",
+        "start of colonial period",
+        "relative liberalization",
+        "harsh conservative government",
+        "militarization, ethnocide"
+      )
+    )
   )
-)
-
 
 tokens <- corpus_korean_by_era %>%
   mutate(article_id = row_number()) %>%
   select(article_id, era, processed_text) %>%
-  filter(!is.na(era)) %>%
+  filter(!is.na(era), processed_text != "") %>%
   unnest_tokens(word, processed_text)
 
-sentiment_by_era <- tokens %>%
+sentiment_by_article <- tokens %>%
   inner_join(my_sentiments, by = "word") %>%
-  count(era, sentiment) %>%
-  group_by(era) %>%
-  mutate(percent = n / sum(n) * 100) %>%
-  ungroup()
+  count(article_id, era, sentiment) %>%
+  pivot_wider(
+    names_from = sentiment,
+    values_from = n,
+    values_fill = 0
+  ) %>%
+  mutate(
+    sentiment_score = positive - negative,
+    total_sentiment_words = positive + negative,
+    sentiment_percent = sentiment_score / total_sentiment_words * 100
+  )
 
-ggplot(sentiment_by_era, aes(x = era, y = percent, fill = sentiment)) +
-  geom_col(position = "dodge") +
+ggplot(sentiment_by_article,
+       aes(x = era, y = sentiment_score, fill = era)) +
+  geom_violin(trim = FALSE, alpha = 0.6) +
+  geom_boxplot(width = 0.12, outlier.size = 0.5) +
   labs(
-    title = "Positive and Negative Sentiment by Era",
+    title = "Distribution of Sentiment Scores by Era",
     x = "Era",
-    y = "Percentage of sentiment words",
-    fill = "Sentiment"
+    y = "Sentiment Score"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 25, hjust = 1),
+    legend.position = "none"
+  )
 
 
 ##script for LDA topics
