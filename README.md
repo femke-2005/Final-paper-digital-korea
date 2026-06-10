@@ -53,6 +53,10 @@ Sentiment analysis further indicates that emotional language varied across histo
 │   ├── topic_summary_by_era.csv
 │   └── sentiment_scores_by_era.png
 │
+├── figures/
+│   ├── topic_summary_by_era.csv
+│   └── sentiment_scores_by_era.png
+│
 ├── Final_Paper.pdf
 ├── README.md
 ├── LICENSE
