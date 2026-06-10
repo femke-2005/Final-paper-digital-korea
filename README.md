@@ -11,7 +11,7 @@
 
 ## Project Description
 
-This repository contains the materials for a replication of the final paper "Sentiment and Topics in Korean Colonial Magazines (1896–1942)."
+"This repository contains all data, scripts, and outputs required to reproduce the analyses presented in the final paper." of the final paper "Sentiment and Topics in Korean Colonial Magazines (1896–1942)."
 
 The project analyzes how the tone and themes of Korean magazines changed throughout different periods of Japanese colonial rule. Computational text analysis methods were applied to a corpus of Korean magazines to find patterns that would be difficult to detect through reading alone.
 
