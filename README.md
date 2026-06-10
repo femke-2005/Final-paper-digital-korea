@@ -61,7 +61,7 @@ Sentiment analysis further indicates that emotional language varied across histo
 ├── README.md
 ├── LICENSE
 ├── CITATION.cff
-└── RStudio dataset.R
+└── Analysis script.R
 ```
 
 ---
